@@ -1,4 +1,4 @@
-# TicTacToe-MIniMax-Algo
+# TicTacToe-MiniMax-Algo
 Tic Tac Toe game with minmax algorithm
 
 
