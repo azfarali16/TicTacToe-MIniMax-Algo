@@ -103,7 +103,7 @@ class GameLogic:
         for move in possible_moves:
             row,col = move
             self.gameboard.set_cell(row,col,self.ai_mark.value)
-            score = self.minimax(self.gameboard,False)
+            score = self.minimax(self.gameboard,float('-inf'),float('+inf'),False)
             self.gameboard.set_cell(row,col,' ')
             if score > best_score:
                 best_score = score
@@ -114,7 +114,40 @@ class GameLogic:
 
    
 
-    def minimax(self,board,isMaximizing):
+    # def minimax(self,board,isMaximizing):
+    #     winner = self.check_winner()  #eval
+    #     if winner:
+    #         return Score[winner]
+        
+    #     possible_moves = board.get_possible_moves()
+
+    #     if not possible_moves:
+    #         return 0
+        
+    #     if isMaximizing: #AI turn
+
+    #         best_score = float('-inf')
+    #         for move in possible_moves:
+    #             row,col = move
+    #             board.set_cell(row,col,self.ai_mark.value)
+    #             score = self.minimax(board,not isMaximizing)
+    #             board.set_cell(row,col,' ')
+    #             best_score = max(score, best_score)
+    #         return best_score
+
+    #     else: #Player Turn
+
+    #         best_score = float('inf')
+    #         for move in possible_moves:
+    #             row,col = move
+    #             board.set_cell(row,col,self.player_mark.value)
+    #             score = self.minimax(board,not isMaximizing)
+    #             board.set_cell(row,col,' ')
+    #             best_score = min(score, best_score)
+    #         return best_score
+
+
+    def minimax(self,board,alpha,beta,isMaximizing): # ALPHA - BETA PRUNING
         winner = self.check_winner()  #eval
         if winner:
             return Score[winner]
@@ -130,9 +163,12 @@ class GameLogic:
             for move in possible_moves:
                 row,col = move
                 board.set_cell(row,col,self.ai_mark.value)
-                score = self.minimax(board,not isMaximizing)
+                score = self.minimax(board,alpha,beta,not isMaximizing)
                 board.set_cell(row,col,' ')
                 best_score = max(score, best_score)
+                alpha = max(alpha,score)
+                if beta <= alpha:
+                    break
             return best_score
 
         else: #Player Turn
@@ -141,7 +177,10 @@ class GameLogic:
             for move in possible_moves:
                 row,col = move
                 board.set_cell(row,col,self.player_mark.value)
-                score = self.minimax(board,not isMaximizing)
+                score = self.minimax(board,alpha,beta,not isMaximizing)
                 board.set_cell(row,col,' ')
                 best_score = min(score, best_score)
+                beta = min(beta,score)
+                if beta <= alpha:
+                    break
             return best_score
